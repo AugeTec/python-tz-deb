@@ -1,5 +1,4 @@
 all:
-	make install_build_deps
 	make download_sources
 	make extract_sources
 	make build
@@ -15,8 +14,10 @@ extract_sources:
 
 build:
 	cd pytz-${PYTZ_VERSION} && python3 setup.py --command-packages=stdeb.command bdist_deb 
-	mv pytz-${PYTZ_VERSION}/deb_dist .
+	mkdir -p ./deb_dist
+	cp -r pytz-${PYTZ_VERSION}/deb_dist/* ./deb_dist
 	
 
 clean:
 	rm -rf pytz-*
+	rm -rf deb_dist
