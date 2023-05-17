@@ -17,7 +17,7 @@ jobs:
       run: apt update
 
     - name: Install deb build dependencies
-      run: apt-get -y install make debhelper-compat dh-python python3-all 
+      run: apt-get -y install make debhelper-compat dh-python python3-all python3-pip
     
     - name: Install python build dependencies
       run: make install_build_deps
