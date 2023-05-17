@@ -6,7 +6,7 @@ all:
 	make build
 
 install_build_deps:
-	pip3 install stdeb
+	pip3 install stdeb requests
 
 download_sources:
 	pypi-download pytz --release=${PYTZ_VERSION}
