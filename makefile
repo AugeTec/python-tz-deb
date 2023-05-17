@@ -1,3 +1,5 @@
+PYTZ_VERSION=2023.3
+
 all:
 	make download_sources
 	make extract_sources
