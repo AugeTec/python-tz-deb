@@ -1,0 +1,56 @@
+name: Makefile CI
+
+on:
+  push:
+    tags:
+      - '*'
+
+
+jobs:
+  build-debian-bullseye-slim:
+    runs-on: ubuntu-latest
+    container: debian:bullseye-slim
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Update APT cache
+      run: apt update
+
+    - name: Install deb build dependencies
+      run: apt-get -y install make debhelper-compat dh-python python3-all python3-pip
+    
+    - name: Install python build dependencies
+      run: make install_build_deps
+      
+    - name: Build 
+      run:
+        make
+
+    - name: Version
+      run: echo "::set-output name=version::$(make version)"
+      id: version
+    
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{ steps.version.outputs.version }}-debian-bullseye
+        tag_name: ${{ github.ref }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: upload artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./python3-tz_${{ steps.version.outputs.version }}.deb
+        asset_name: python3-tz_${{ steps.version.outputs.version }}-debian-bullseye.deb
+        asset_content_type: application/x-deb
+
+
+  
+  
