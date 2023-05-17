@@ -1,0 +1,23 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: debian:bullseye-slim
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install build dependencies
+      run: 
+        apt update && apt install debhelper-compat dh-python python3-all
+        make install_build_deps
+      
+    - name: Build 
+      run:
+        make
