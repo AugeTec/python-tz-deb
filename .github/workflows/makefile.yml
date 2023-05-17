@@ -12,11 +12,15 @@ jobs:
     container: debian:bullseye-slim
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Update APT cache
+      run: apt update
 
-    - name: Install build dependencies
-      run: 
-        apt update && apt install debhelper-compat dh-python python3-all
-        make install_build_deps
+    - name: Install deb build dependencies
+      run: apt install make debhelper-compat dh-python python3-all
+    
+    - name: Install python build dependencies
+      run: make install_build_deps
       
     - name: Build 
       run:
